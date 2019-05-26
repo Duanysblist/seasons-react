@@ -2,13 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 class App extends React.Component {
-  render() {
+  constructor(props) {
+    super(props); //have to do this every time
+
+    // THIS IS THE ONLY TIME WE DO A DIRECT ASSIGNMENT TO this.state
+    this.state = { lat: null };
+
     window.navigator.geolocation.getCurrentPosition(
-      position => console.log(position),
+      position => {
+        // we called setState!!!!
+        this.setState({ lat: position.coords.latitude });
+
+        // we did not!!!
+        // this.state.lat = position.coords.latitude
+      },
       err => console.log(err)
     );
+  }
+  // Defined our constructor method and initialized our state object
 
-    return <div>Latitude: </div>;
+  // React says we have to define render!!
+  render() {
+    return <div>Latitude: {this.state.lat}</div>;
   }
 }
 
