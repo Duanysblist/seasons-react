@@ -2,23 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props); //have to do this every time
+  state = { lat: null, errorMessage: '' };
 
-    // THIS IS THE ONLY TIME WE DO A DIRECT ASSIGNMENT TO this.state
-    this.state = { lat: null, errorMessage: '' };
-
+  componentDidMount() {
     window.navigator.geolocation.getCurrentPosition(
-      position => {
-        // we called setState!!!!
-        this.setState({ lat: position.coords.latitude });
-
-        // we did not!!!
-        // this.state.lat = position.coords.latitude
-      },
-      err => {
-        this.setState({ errorMessage: err.message });
-      }
+      position => this.setState({ lat: position.coords.latitude }),
+      err => this.setState({ errorMessage: err.message })
     );
   }
   // Defined our constructor method and initialized our state object
@@ -30,7 +19,7 @@ class App extends React.Component {
       return <div>Error: {this.state.errorMessage}</div>;
     }
 
-    if (this.state.errorMessage && this.state.lat) {
+    if (!this.state.errorMessage && this.state.lat) {
       return <div>Latitude: {this.state.lat}</div>;
     }
 
